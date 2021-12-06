@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "control-casa-domotica.ino",
+    "port": "COM3",
+    "output": "../build"
+}

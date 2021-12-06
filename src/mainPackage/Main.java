@@ -1,7 +1,5 @@
 package mainPackage;
 
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 import java.awt.Color;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
@@ -11,14 +9,16 @@ public class Main extends javax.swing.JFrame {
 
     PanamaHitek_Arduino arduino = new PanamaHitek_Arduino();
     Boolean automaticState = false;
+    Boolean btnAutomaticState = false;
+    Boolean btnVentanaState = false;
+    Boolean btnDormirState = false;
     
     public void disableAll(){
         btnAutomatico.setEnabled(false);
-        btnManual.setEnabled(false);
+        btnDormir.setEnabled(false);
         sliderHab.setEnabled(false);
         sliderBano.setEnabled(false);
-        btnVentanaOn.setEnabled(false);
-        btnVentanaOff.setEnabled(false);
+        btnVentana.setEnabled(false);
         sliderTime.setEnabled(false);
     }
     
@@ -34,10 +34,9 @@ public class Main extends javax.swing.JFrame {
         initFrame.setBackground(Color.white);
         
         btnConectar.setBackground(Color.white);
-        btnManual.setBackground(Color.white);
+        btnDormir.setBackground(Color.white);
         btnAutomatico.setBackground(Color.white);
-        btnVentanaOn.setBackground(Color.white);
-        btnVentanaOff.setBackground(Color.white);
+        btnVentana.setBackground(Color.white);
         
         disableAll();
     }
@@ -52,11 +51,14 @@ public class Main extends javax.swing.JFrame {
         sliderTime.setMinimum(6);
         sliderTime.setMaximum(24);
         sliderTime.setMajorTickSpacing(6);
+        sliderTime.setValue(12);
+        sliderBano.setValue(0);
+        sliderHab.setValue(0);
     }
     
     public void initEnable(){
         btnAutomatico.setEnabled(true);
-        btnManual.setEnabled(true);
+        btnDormir.setEnabled(true);
     }
     
     
@@ -85,12 +87,11 @@ public class Main extends javax.swing.JFrame {
         inputSerial = new javax.swing.JTextField();
         inputPort = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
-        btnManual = new javax.swing.JButton();
+        btnDormir = new javax.swing.JButton();
         btnAutomatico = new javax.swing.JButton();
         sliderHab = new javax.swing.JSlider();
         sliderBano = new javax.swing.JSlider();
-        btnVentanaOn = new javax.swing.JButton();
-        btnVentanaOff = new javax.swing.JButton();
+        btnVentana = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         sliderTime = new javax.swing.JSlider();
         jPanel1 = new javax.swing.JPanel();
@@ -139,13 +140,13 @@ public class Main extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnManual.setText("Manual");
-        btnManual.addActionListener(new java.awt.event.ActionListener() {
+        btnDormir.setText("Dormir");
+        btnDormir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnManualActionPerformed(evt);
+                btnDormirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnManual, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 11, 89, 44));
+        getContentPane().add(btnDormir, new org.netbeans.lib.awtextra.AbsoluteConstraints(146, 11, 89, 44));
 
         btnAutomatico.setText("Automático");
         btnAutomatico.setToolTipText("");
@@ -174,21 +175,13 @@ public class Main extends javax.swing.JFrame {
         });
         getContentPane().add(sliderBano, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 154, -1, -1));
 
-        btnVentanaOn.setText("l");
-        btnVentanaOn.addActionListener(new java.awt.event.ActionListener() {
+        btnVentana.setText("Abrir");
+        btnVentana.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVentanaOnActionPerformed(evt);
+                btnVentanaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVentanaOn, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 226, 42, 37));
-
-        btnVentanaOff.setText("O");
-        btnVentanaOff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVentanaOffActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnVentanaOff, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 226, -1, 37));
+        getContentPane().add(btnVentana, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 226, 90, 37));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainPackage/Grupo 2.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(314, 28, 220, 323));
@@ -223,57 +216,103 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAutomaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutomaticoActionPerformed
-        sliderHab.setEnabled(false);
-        sliderBano.setEnabled(false);
-        sliderTime.setEnabled(true);
-        automaticState = false;
-        
-        btnManual.setBackground(Color.white);
-        btnManual.setForeground(Color.black);
-        
-        btnAutomatico.setBackground(new Color(76,16,45));
-        btnAutomatico.setForeground(Color.white);
-        
-        btnVentanaOn.setEnabled(false);
-        btnVentanaOff.setEnabled(false);
-        
-        try {
-            arduino.sendData("D");// manda señal de modo automático 
-            arduino.sendData("0");// Apaga el foco principal a nivel intermedio
-            arduino.sendData("6");// Apaga el foco del baño a nivel intermedio
-        } catch (Exception ex) {
-            //Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        if(btnAutomaticState == false){
+            sliderHab.setEnabled(false);
+            sliderBano.setEnabled(false);
+            sliderTime.setEnabled(true);
+            btnVentana.setEnabled(false);
+            btnVentana.setForeground(Color.gray);
+
+            automaticState = true;
+            btnAutomaticState = true;
+            btnAutomatico.setBackground(new Color(76,16,45));
+            btnAutomatico.setForeground(Color.white);
+
+            
+            try {
+                arduino.sendData("D");// manda señal de modo automático 
+                //arduino.sendData("0");// Apaga el foco principal
+                //arduino.sendData("6");// Apaga el foco del baño
+            } catch (Exception ex) {}
+            
+        }else{
+            sliderHab.setEnabled(true);
+            sliderBano.setEnabled(true);
+            sliderTime.setEnabled(false);
+            btnVentana.setEnabled(true);
+            btnVentana.setForeground(Color.black);
+
+            
+            automaticState = false;
+            btnAutomaticState = false;
+            btnAutomatico.setBackground(Color.white);
+            btnAutomatico.setForeground(Color.black);
+
+            
+
+            try {
+                arduino.sendData("d");// manda señal de modo manual
+                //arduino.sendData("3");// Enciende el foco principal a nivel intermedio
+                //arduino.sendData("9");// Enciende el foco del baño a nivel intermedio
+            } catch (Exception ex) {}
         }
+        
+        
     }//GEN-LAST:event_btnAutomaticoActionPerformed
 
-    private void btnManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualActionPerformed
-        sliderHab.setEnabled(true);
-        sliderHab.setValue(3);
-        sliderBano.setEnabled(true);
-        sliderBano.setValue(3);
-        sliderTime.setEnabled(false);
-        
-        automaticState = true;
-        
-        btnManual.setBackground(new Color(76,16,45));
-        btnManual.setForeground(Color.white);
-        
-        btnAutomatico.setBackground(Color.white);
-        btnAutomatico.setForeground(Color.black);
-        
-        btnVentanaOn.setEnabled(true);
-        btnVentanaOff.setEnabled(true);
-        
-        
-        try {
-            arduino.sendData("d");// manda señal de modo manual
-            arduino.sendData("3");// Enciende el foco principal a nivel intermedio
-            arduino.sendData("9");// Enciende el foco del baño a nivel intermedio
-        } catch (Exception ex) {}
-    }//GEN-LAST:event_btnManualActionPerformed
+    private void btnDormirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDormirActionPerformed
+        if(btnDormirState == false){
+            sliderHab.setEnabled(false);
+            sliderBano.setEnabled(false);
+            sliderTime.setEnabled(false);
+            btnVentana.setEnabled(false);
+            
+            btnAutomatico.setEnabled(false);
+            
+
+            
+            automaticState = false;
+            
+            btnDormirState = true;
+            btnDormir.setBackground(new Color(76,16,45));
+            btnDormir.setForeground(Color.white);
+            
+            btnAutomaticState = false;
+            btnAutomatico.setBackground(Color.white);
+            btnAutomatico.setForeground(Color.gray);
+
+            btnVentanaState = false;
+            btnVentana.setBackground(Color.white);
+            btnVentana.setForeground(Color.gray);
+            
+            try {
+                arduino.sendData("f");// manda señal de modo dormir
+            } catch (Exception ex) {}
+            
+        }else{
+            sliderHab.setEnabled(false);
+            sliderBano.setEnabled(false);
+            sliderTime.setEnabled(true);
+            btnAutomatico.setEnabled(true);
+            
+            
+            btnAutomaticState = true;
+            automaticState = true;
+            btnAutomatico.setBackground(new Color(76,16,45));
+            btnAutomatico.setForeground(Color.white);
+            
+            btnDormirState = false;
+            btnDormir.setBackground(Color.white);
+            btnDormir.setForeground(Color.black);
+            
+            try {
+                arduino.sendData("F");// manda señal de apagar modo dormir
+            } catch (Exception ex) {}
+        }
+    }//GEN-LAST:event_btnDormirActionPerformed
 
     private void sliderHabStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderHabStateChanged
-        if(automaticState == true && sliderHab.isEnabled()){
+        if(automaticState == false && sliderHab.isEnabled()){
             switch(sliderHab.getValue()){
             case 0: 
                 try {
@@ -338,7 +377,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConectarActionPerformed
 
     private void sliderBanoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBanoStateChanged
-        if(automaticState == true && sliderBano.isEnabled()){
+        if(automaticState == false && sliderBano.isEnabled()){
         switch(sliderBano.getValue()){
             case 0: 
                 try {
@@ -388,25 +427,25 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_sliderBanoStateChanged
 
-    private void btnVentanaOnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentanaOnActionPerformed
-        btnVentanaOn.setBackground(new Color(76,16,45));
-        btnVentanaOn.setForeground(Color.white);
-        btnVentanaOff.setBackground(Color.white);
-        btnVentanaOff.setForeground(Color.black);
-        try{
-            arduino.sendData("e");
-        }catch(Exception ex){}
-    }//GEN-LAST:event_btnVentanaOnActionPerformed
-
-    private void btnVentanaOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentanaOffActionPerformed
-        btnVentanaOn.setBackground(Color.white);
-        btnVentanaOn.setForeground(Color.black);
-        btnVentanaOff.setBackground(new Color(76,16,45));
-        btnVentanaOff.setForeground(Color.white);
-        try{
-            arduino.sendData("E");
-        }catch(Exception ex){}
-    }//GEN-LAST:event_btnVentanaOffActionPerformed
+    private void btnVentanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentanaActionPerformed
+        if(btnVentanaState == false){
+            btnVentana.setBackground(new Color(76,16,45));
+            btnVentana.setForeground(Color.white);
+            btnVentanaState = true;
+            try{
+                arduino.sendData("e");
+            }catch(Exception ex){}
+        }else{
+            btnVentana.setBackground(Color.white);
+            btnVentana.setForeground(Color.black);
+            btnVentanaState = false;
+            try{
+                arduino.sendData("E");
+            }catch(Exception ex){}
+        }
+        
+        
+    }//GEN-LAST:event_btnVentanaActionPerformed
 
     private void btnConectarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConectarMouseEntered
         btnConectar.setBackground(new Color(76,16,45));
@@ -419,7 +458,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConectarMouseExited
 
     private void sliderTimeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderTimeStateChanged
-        if(automaticState == false && sliderTime.isEnabled()){
+        if(automaticState == true && sliderTime.isEnabled()){
         switch(sliderTime.getValue()){
             case 6: 
                 try {
@@ -484,9 +523,8 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAutomatico;
     private javax.swing.JButton btnConectar;
-    private javax.swing.JButton btnManual;
-    private javax.swing.JButton btnVentanaOff;
-    private javax.swing.JButton btnVentanaOn;
+    private javax.swing.JButton btnDormir;
+    private javax.swing.JButton btnVentana;
     private javax.swing.JFrame initFrame;
     private javax.swing.JComboBox<String> inputPort;
     private javax.swing.JTextField inputSerial;
