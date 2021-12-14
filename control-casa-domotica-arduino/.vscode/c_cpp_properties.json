@@ -8,8 +8,8 @@
             "intelliSenseMode": "windows-msvc-x64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:\\Program Files\\WindowsApps\\ArduinoLLC.ArduinoIDE_1.8.51.0_x86__mdqgnx93n4wtt",
-                "C:\\cygwin64\\bin"
+                "C:\\Program Files (x86)\\Arduino",
+                "C:\\MinGW\\bin"
             ],
             "forcedInclude": [],
             "cStandard": "c17",

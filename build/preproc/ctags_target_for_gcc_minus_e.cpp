@@ -1,3 +1,4 @@
+# 1 "c:\\Users\\luisf\\Workspace\\Java\\ADP\\controlArduino\\control-casa-domotica-arduino\\control-casa-domotica.ino"
 int led_principal = 6;
 int led_bano = 5;
 int brillo_principal = 0;
@@ -21,15 +22,15 @@ int bajarCortina = 0;
 
 void setup()
 {
-  pinMode(led_principal, OUTPUT);
-  pinMode(led_bano, OUTPUT);
-  
+  pinMode(led_principal, 0x1);
+  pinMode(led_bano, 0x1);
 
-  pinMode(sensor, INPUT);
-  pinMode(limiteInterruptorAbajo, INPUT_PULLUP);
-  pinMode(limiteInterruptorArriba, INPUT_PULLUP);
-  pinMode(cortinaHaciaArriba, OUTPUT);
-  pinMode(cortinaHaciaAbajo, OUTPUT);
+
+  pinMode(sensor, 0x0);
+  pinMode(limiteInterruptorAbajo, 0x2);
+  pinMode(limiteInterruptorArriba, 0x2);
+  pinMode(cortinaHaciaArriba, 0x1);
+  pinMode(cortinaHaciaAbajo, 0x1);
   Serial.begin(9600);
 }
 
@@ -90,7 +91,7 @@ void loop()
       case 'C':
         horaDia = 24;
         break;
-        
+
 
       // -------------- Botonoes
       // Señal modo manual
@@ -101,7 +102,7 @@ void loop()
       case 'D':
         automatico = true;
         break;
-      
+
       // Señal de ventana. Encendido.
       case 'e':
         ventanaAbierta = true;
@@ -110,7 +111,7 @@ void loop()
       case 'E':
         ventanaAbierta = false;
         break;
-      
+
       // Señal de dormir. Encendido 
       case 'f':
         dormir = true;
@@ -121,13 +122,13 @@ void loop()
         dormir = false;
         automatico = true;
         break;
-      
+
       default:
         break;
     }
   }
   // -------------------------------------------------------------------
-    
+
   if (automatico == true)
   {
     switch (horaDia)
@@ -135,7 +136,7 @@ void loop()
     case 6:
       brillo_principal = 60;
       brillo_bano = 60;
-      
+
       break;
     case 12:
       brillo_principal = 0;
@@ -146,13 +147,13 @@ void loop()
       brillo_bano = 60;
       if (digitalRead(limiteInterruptorArriba) == highVal)
       {
-        subirCortina = LOW;
-        bajarCortina = HIGH;
+        subirCortina = 0x0;
+        bajarCortina = 0x1;
       }
       if (digitalRead(limiteInterruptorAbajo) == highVal)
       {
-        subirCortina = LOW;
-        bajarCortina = LOW;
+        subirCortina = 0x0;
+        bajarCortina = 0x0;
       }
       break;
     case 24:
@@ -169,34 +170,34 @@ void loop()
     if(ventanaAbierta == true){
       if (digitalRead(limiteInterruptorAbajo) == highVal)
       {
-        subirCortina = HIGH;
-        bajarCortina = LOW;
+        subirCortina = 0x1;
+        bajarCortina = 0x0;
       }
       if (digitalRead(limiteInterruptorArriba) == highVal)
       {
-        subirCortina = LOW;
-        bajarCortina = LOW;
+        subirCortina = 0x0;
+        bajarCortina = 0x0;
       }
     }else{
       if (digitalRead(limiteInterruptorArriba) == highVal)
       {
-        subirCortina = LOW;
-        bajarCortina = HIGH;
+        subirCortina = 0x0;
+        bajarCortina = 0x1;
       }
       if (digitalRead(limiteInterruptorAbajo) == highVal)
       {
-        subirCortina = LOW;
-        bajarCortina = LOW;
+        subirCortina = 0x0;
+        bajarCortina = 0x0;
       }
     }
-    
+
   }
 
   if (dormir == true)
   {
     //  --------- Sensor ------
     lectura_sensor = digitalRead(sensor);
-    if (lectura_sensor == HIGH)
+    if (lectura_sensor == 0x1)
     {
       brillo_principal = 255;
       brillo_bano = 255;
@@ -214,13 +215,13 @@ void loop()
     // Suponiendo que el interruptor se cierra cuando se toca el límite
     if (digitalRead(limiteInterruptorArriba) == highVal)
     {
-      subirCortina = LOW;
-      bajarCortina = HIGH;
+      subirCortina = 0x0;
+      bajarCortina = 0x1;
     }
     if (digitalRead(limiteInterruptorAbajo) == highVal)
     {
-      subirCortina = LOW;
-      bajarCortina = LOW;
+      subirCortina = 0x0;
+      bajarCortina = 0x0;
     }
   }
 

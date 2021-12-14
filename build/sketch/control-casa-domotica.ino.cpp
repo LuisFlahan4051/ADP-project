@@ -1,3 +1,5 @@
+#include <Arduino.h>
+#line 1 "c:\\Users\\luisf\\Workspace\\Java\\ADP\\controlArduino\\control-casa-domotica-arduino\\control-casa-domotica.ino"
 int led_principal = 6;
 int led_bano = 5;
 int brillo_principal = 0;
@@ -19,6 +21,11 @@ int cortinaHaciaAbajo = 9;
 int subirCortina = 0;
 int bajarCortina = 0;
 
+#line 22 "c:\\Users\\luisf\\Workspace\\Java\\ADP\\controlArduino\\control-casa-domotica-arduino\\control-casa-domotica.ino"
+void setup();
+#line 36 "c:\\Users\\luisf\\Workspace\\Java\\ADP\\controlArduino\\control-casa-domotica-arduino\\control-casa-domotica.ino"
+void loop();
+#line 22 "c:\\Users\\luisf\\Workspace\\Java\\ADP\\controlArduino\\control-casa-domotica-arduino\\control-casa-domotica.ino"
 void setup()
 {
   pinMode(led_principal, OUTPUT);
@@ -229,3 +236,4 @@ void loop()
   digitalWrite(cortinaHaciaAbajo, bajarCortina);
   digitalWrite(cortinaHaciaArriba, subirCortina);
 }
+
