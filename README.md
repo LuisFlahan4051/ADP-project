@@ -4,7 +4,7 @@ Proyecto escolar IPN - UPIITA
 
 ## Capturas
 ![alt text](cap1.png)
-![alt text](cap 2.png)
+![alt text](cap2.png)
 ![alt text](cap3.png)
 
 Video demostrativo:
