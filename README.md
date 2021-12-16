@@ -1,15 +1,11 @@
-# Proyecto Simple Registradora
+# Proyecto control de una casa domótica
 
-Proyecto escolar del instituto:
-IPN - UPIICSA
-
-Profesor: 
-José Luis Lopez Goytia.
+Proyecto escolar IPN - UPIITA
 
 ## Capturas
-![alt text](cap1)
-![alt text](cap2)
-![alt text](cap3)
+![alt text](cap1.png)
+![alt text](cap2.png)
+![alt text](cap3.png)
 
 Video demostrativo:
 
