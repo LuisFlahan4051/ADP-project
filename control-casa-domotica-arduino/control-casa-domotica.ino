@@ -135,7 +135,16 @@ void loop()
     case 6:
       brillo_principal = 60;
       brillo_bano = 60;
-      
+      if (digitalRead(limiteInterruptorAbajo) == highVal)
+      {
+        subirCortina = HIGH;
+        bajarCortina = LOW;
+      }
+      if (digitalRead(limiteInterruptorArriba) == highVal)
+      {
+        subirCortina = LOW;
+        bajarCortina = LOW;
+      }
       break;
     case 12:
       brillo_principal = 0;
