@@ -7,9 +7,9 @@ Profesor:
 José Luis Lopez Goytia.
 
 ## Capturas
-![alt text](capturas/Captura de pantalla 2021-12-13 223846.png)
-![alt text](capturas/Captura de pantalla 2021-12-13 223905.png)
-![alt text](capturas/Captura de pantalla 2021-12-13 223348.png)
+![alt text](cap1)
+![alt text](cap2)
+![alt text](cap3)
 
 Video demostrativo:
 
